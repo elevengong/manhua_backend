@@ -67,6 +67,17 @@ class MyController extends Controller
 
     }
 
+//    //创建多级目录
+//    protected function mkdirs_2($path){
+//        if(!is_dir($path)){
+//            mkdirs_2(dirname($path));
+//            if(!mkdir($path, 0777)){
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+
 
     //上传图片
     public function uploadphoto(Request $request,$id){
