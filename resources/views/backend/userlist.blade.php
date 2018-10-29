@@ -6,7 +6,7 @@
             <input type="hidden" id="hid_tid" value="0" />
             <article class="cl pd-20">
                 <div class="text-c">
-                    <form id="frm_admin" action="/backend/user/userlist" method="post" >
+                    <form id="frm_admin" action="/backend/user/list" method="post" >
                         {{csrf_field()}}
                         <input type="text" class="input-text" style="width:250px" placeholder="输入会员名" id="seach_uname" name="searchword" value="">
                         <button type="submit" class="btn btn-success radius" id="btn_seach" name="btn_seach">

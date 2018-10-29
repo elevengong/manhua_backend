@@ -38,11 +38,22 @@ Route::group(['middleware' => ['web','admin.login']],function () {
     Route::post('/backend/user/changestatus','backend\UserController@changestatus');
     Route::post('/backend/user/changepwd','backend\UserController@chnagepwd');
 
-
-
-
     //代理列表
     Route::any('/backend/daili/list','backend\DailiController@daililist');
+    Route::post('/backend/daili/changestatus','backend\DailiController@changestatus');
+    Route::post('/backend/daili/changepwd','backend\DailiController@chnagepwd');
+    Route::any('/backend/daili/adddaili','backend\DailiController@adddaili');
+
+    //漫画管理
+    Route::any('/backend/manhua/manhualist','backend\ManhuaController@manhualist');
+    Route::any('/backend/manhua/addmanhua','backend\ManhuaController@addmanhua');
+    Route::any('/backend/manhua/editmanhua','backend\ManhuaController@editmanhua');
+
+    Route::any('/backend/manhua/chapterlist','backend\ManhuaController@chapterlist');
+    Route::any('/backend/manhua/addchapter','backend\ManhuaController@addchapter');
+    Route::any('/backend/manhua/editchapter','backend\ManhuaController@editchapter');
+
+
 
 
 
@@ -63,25 +74,6 @@ Route::group(['middleware' => ['web','admin.login']],function () {
     Route::any('/backend/uploadphoto/{id}','MyController@uploadphoto');
 });
 
-
-//---------------------pc前端------------------------
-
-//Route::any('/getadphoto/{uid}','frontend\IndexController@getAdPhoto')->where(['uid' => '[0-9]+']);
-//Route::any('/test','frontend\IndexController@test');
-//Route::group(['middleware' => ['cors']],function () {
-//
-//
-//
-//});
-
-//---------------------wap前端------------------------
-//Route::get('/m/','frontend\WapController@index');
-//Route::get('/m/joinus','frontend\WapController@joinus');
-//Route::get('/m/job','frontend\WapController@job');
-//
-//Route::post('/uploadresume','frontend\IndexController@upload');
-//Route::any('/frontend/uploadresume','frontend\FrontendController@uploadresume');
-//Route::post('/frontend/updateapply','frontend\IndexController@updateapply');
 
 
 

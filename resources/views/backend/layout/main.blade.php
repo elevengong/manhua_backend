@@ -30,14 +30,14 @@
     <!--[if IE 6]>
     <!--/meta 作为公共模版分离出去-->
 
-    <title>广告联盟系统总后台</title>
+    <title>漫画站管理系统</title>
 </head>
 <body>
 <!--_header 作为公共模版分离出去-->
 <header class="navbar-wrapper">
     <div class="navbar navbar-fixed-top">
         <div class="container-fluid cl">
-            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="#">广告联盟系统总后台</a>
+            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="#">漫画站管理系统</a>
             <span class="logo navbar-slogan f-l mr-10 hidden-xs">v3.0</span>
             <a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
 
@@ -89,6 +89,19 @@
             </dd>
 
             <dt>
+                <i class="Hui-iconfont">&#xe616;</i> 漫画管理
+                <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
+            </dt>
+
+            <dd style="display: none">
+                <ul>
+                    <li><a data-href="{{url('/backend/manhua/manhualist')}}" href="javascript:void(0)" onclick="clicklink(this)" title="漫画列表">漫画列表</a></li>
+                    <li><a data-href="{{url('/backend/manhua/chapterlist')}}" href="javascript:void(0)" onclick="clicklink(this)" title="漫画章节列表">漫画章节列表</a></li>
+                    <li><a data-href="{{url('/backend/manhua/deal')}}" href="javascript:void(0)" onclick="clicklink(this)" title="漫画入库">漫画入库</a></li>
+                </ul>
+            </dd>
+
+            <dt>
                 <i class="Hui-iconfont">&#xe616;</i> 会员管理
                 <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
             </dt>
@@ -111,19 +124,6 @@
                     <li><a data-href="{{url('/backend/daili/withdraw')}}" href="javascript:void(0)" onclick="clicklink(this)" title="代理提款审核">代理提款审核</a></li>
                 </ul>
             </dd>
-
-
-            <dt>
-                <i class="Hui-iconfont">&#xe616;</i> 流量分析
-                <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
-            </dt>
-
-            <dd style="display: none">
-                <ul>
-                    <li><a data-href="{{url('/backend/ads/traffic')}}" href="javascript:void(0)" onclick="clicklink(this)" title="流量分析">流量分析</a></li>
-                </ul>
-            </dd>
-
 
 
 

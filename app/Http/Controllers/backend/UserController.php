@@ -12,11 +12,12 @@ class UserController extends MyController
 {
     public function userlist(Request $request){
         if($request->isMethod('post')){
-
+            $searchword = request()->input('searchword');
+            $userArray = Users::where('user_name','like','%'.$searchword.'%')->orderBy('uid', 'desc')->paginate($this->backendPageNum);
         }else{
             $userArray = Users::orderBy('uid', 'desc')->paginate($this->backendPageNum);
-            return view('backend.userlist', ['datas' => $userArray])->with('admin', session('admin'));
         }
+        return view('backend.userlist', ['datas' => $userArray])->with('admin', session('admin'));
 
     }
 
