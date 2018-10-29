@@ -26,8 +26,6 @@ class ManhuaController extends MyController
         return view('backend.manhualist', ['datas' => $manhuaArray])->with('admin', session('admin'));
     }
 
-
-
     public function addmanhua(Request $request){
         if($request->isMethod('post')){
             $input=$request->all();
@@ -46,6 +44,35 @@ class ManhuaController extends MyController
         }else{
             $firstCategoryArray = Category::where('parents_id','0')->orderBy('priority','desc')->get()->toArray();
             return view('backend.addmanhua',compact('firstCategoryArray'));
+        }
+    }
+
+    public function deal(){
+        echo $dir =  dirname(dirname(dirname(dirname(__DIR__))))."/public/readyupload";
+//        echo $dir = __DIR__."/images";
+        echo "<br>";
+        $data = $this->my_scandir($dir);
+        print_r($data);
+    }
+
+    private function my_scandir($dir){
+        if(is_dir($dir)){
+            $files = array();
+            $child_dirs = scandir($dir);
+            foreach($child_dirs as $child_dir){
+                //'.'和'..'是Linux系统中的当前目录和上一级目录，必须排除掉，
+                //否则会进入死循环，报segmentation falt 错误
+                if($child_dir != '.' && $child_dir != '..'){
+                    if(is_dir($dir.'/'.$child_dir)){
+                        $files[$child_dir] = $this->my_scandir($dir.'/'.$child_dir);
+                    }else{
+                        $files[] = $child_dir;
+                    }
+                }
+            }
+            return $files;
+        }else{
+            return $dir;
         }
     }
 

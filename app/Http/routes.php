@@ -53,6 +53,7 @@ Route::group(['middleware' => ['web','admin.login']],function () {
     Route::any('/backend/manhua/addchapter','backend\ManhuaController@addchapter');
     Route::any('/backend/manhua/editchapter','backend\ManhuaController@editchapter');
 
+    Route::any('/backend/manhua/deal','backend\ManhuaController@deal');
 
 
 
