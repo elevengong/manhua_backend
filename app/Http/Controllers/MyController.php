@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Deposit;
 use Illuminate\Http\Request;
-
+//use DB;
 use App\Http\Requests;
 
 class MyController extends Controller
 {
     public $backendPageNum = '20';
     public $Ipbaimingdan = '0'; //ip白名单，目前只有菲律宾的ip可以login，1为开启，0为关闭
+    public $coinrate = '10';  //1远等于10个金币
 
     public function __construct()
     {
         date_default_timezone_set('Asia/Shanghai');
+//        $users = DB::table('users')->get();
+//        echo "aaa";
+//        print_r($users);exit;
     }
 
     //删除指定session数据
@@ -53,11 +56,6 @@ class MyController extends Controller
         }
     }
 
-    //通过deposit_id获取订单金额
-    protected function getDepositMoneyById($id){
-        $DepositDetail = Deposit::select('money')->find($id)->toArray();
-        return $DepositDetail['money'];
-    }
 
     //通过ip获取ip对应的信息
     protected function getIpInfoByCurl($ip){

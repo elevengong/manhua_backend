@@ -1,40 +1,33 @@
-function opennewmanhua() {
+function opennewchapter() {
     var index = layer.open({
         type: 2,
-        title: "添加漫画",
+        title: "添加分类",
         closeBtn: 0,
-        area: ['700px', '500px'], //宽高
+        area: ['700px', '600px'], //宽高
         shadeClose: true,
         resize:false,
-        content: '/backend/manhua/addmanhua/'
+        content: '/backend/manhua/addchapter/'
     });
 }
 
-function addmanhuaprocess() {
-    var name  = $.trim( $('#name').val() );
-    var cid = $.trim( $('#cid').val() );
-    var cover  = $.trim( $('#cover').val() );
-    var finish  = $.trim( $('#finish').val() );
+function addchapterprocess() {
+    var chapter_name  = $.trim( $('#chapter_name').val() );
+    var manhua_id = $.trim( $('#manhua_id').val() );
 
-    if(name == '')
+    if(chapter_name == '')
     {
-        layer.msg('漫画标题不能为空');
+        layer.msg('漫画章节标题不能为空');
         return false;
     }
-    if(cid == '')
+    if(manhua_id == '')
     {
-        layer.msg('分类不能为空');
-        return false;
-    }
-    if(cover == '')
-    {
-        layer.msg('图片不能为空');
+        layer.msg('漫画ID不能为空');
         return false;
     }
 
     $.ajax({
         type:"post",
-        url:"/backend/manhua/addmanhua",
+        url:"/backend/manhua/addchapter",
         dataType:'json',
         headers:{'X-CSRF-TOKEN':$('input[name="_token"]').val()},
         data:$("#form1").serialize(),
@@ -97,7 +90,7 @@ function upload(obj){
                     //window.location.reload();
                     var result = '<img id="img" src="'+data.pic+'" width="80">';
                     $('#show').html(result);
-                    $('#cover').val(data.pic);
+                    $('#chapter_cover').val(data.pic);
 
                 }
 
@@ -111,31 +104,24 @@ function upload(obj){
     }
 }
 
-function editmanhuaprocess(manhua_id) {
-    var name  = $.trim( $('#name').val() );
-    var cid = $.trim( $('#cid').val() );
-    var cover  = $.trim( $('#cover').val() );
-    var finish  = $.trim( $('#finish').val() );
+function opensavephoto(chapter_id) {
+    var index = layer.open({
+        type: 2,
+        title: "添加图片",
+        closeBtn: 0,
+        area: ['700px', '600px'], //宽高
+        shadeClose: true,
+        resize:false,
+        content: '/backend/manhua/savechapterphotos/'+chapter_id
+    });
+}
 
-    if(name == '')
-    {
-        layer.msg('漫画标题不能为空');
-        return false;
-    }
-    if(cid == '')
-    {
-        layer.msg('分类不能为空');
-        return false;
-    }
-    if(cover == '')
-    {
-        layer.msg('图片不能为空');
-        return false;
-    }
+function savechapterphotos(chapter_id) {
+    $('#btn_add_ok').attr('disabled','disabled');
 
     $.ajax({
         type:"post",
-        url:"/backend/manhua/editmanhua/"+manhua_id,
+        url:"/backend/manhua/savechapterphotos/"+chapter_id,
         dataType:'json',
         headers:{'X-CSRF-TOKEN':$('input[name="_token"]').val()},
         data:$("#form1").serialize(),
@@ -154,18 +140,62 @@ function editmanhuaprocess(manhua_id) {
             layer.msg(data.msg);
         }
     });
-
-
 }
 
-function editmanhua(manhua_id) {
-    var index = layer.open({
-        type: 2,
-        title: "修改漫画",
-        closeBtn: 0,
-        area: ['700px', '600px'], //宽高
-        shadeClose: true,
-        resize:false,
-        content: '/backend/manhua/editmanhua/'+manhua_id
+function editchapterprocess(chapter_id) {
+    var chapter_name  = $.trim( $('#chapter_name').val() );
+    var priority = $.trim( $('#priority').val() );
+    // var vip  = $.trim( $('#vip').val() );
+    var pre_chapter_id  = $.trim( $('#pre_chapter_id').val() );
+    var next_chapter_id  = $.trim( $('#next_chapter_id').val() );
+    var coin  = $.trim( $('#coin').val() );
+    var views  = $.trim( $('#views').val() );
+
+    if(chapter_name == '')
+    {
+        layer.msg('漫画章节名不能为空');
+        return false;
+    }
+    if(priority == '')
+    {
+        layer.msg('排序不能为空');
+        return false;
+    }
+    if(pre_chapter_id == '')
+    {
+        layer.msg('上一页不能为空');
+        return false;
+    }
+    if(next_chapter_id == '')
+    {
+        layer.msg('next_chapter_id');
+        return false;
+    }
+    if(coin == '')
+    {
+        layer.msg('金币不能为空');
+        return false;
+    }
+
+    $.ajax({
+        type:"post",
+        url:"/backend/manhua/editchapter/"+chapter_id,
+        dataType:'json',
+        headers:{'X-CSRF-TOKEN':$('input[name="_token"]').val()},
+        data:$("#form1").serialize(),
+        success:function(data){
+            if(data.status == 0)
+            {
+                layer.msg( data.msg );
+            }else{
+                layer.msg( data.msg ,function () {
+                    window.parent.location.reload();
+                    window.location.close();
+                });
+            }
+        },
+        error:function (data) {
+            layer.msg(data.msg);
+        }
     });
 }

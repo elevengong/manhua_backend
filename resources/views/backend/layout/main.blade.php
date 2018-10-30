@@ -96,8 +96,8 @@
             <dd style="display: none">
                 <ul>
                     <li><a data-href="{{url('/backend/manhua/manhualist')}}" href="javascript:void(0)" onclick="clicklink(this)" title="漫画列表">漫画列表</a></li>
-                    <li><a data-href="{{url('/backend/manhua/chapterlist')}}" href="javascript:void(0)" onclick="clicklink(this)" title="漫画章节列表">漫画章节列表</a></li>
-                    <li><a data-href="{{url('/backend/manhua/deal')}}" href="javascript:void(0)" onclick="clicklink(this)" title="漫画入库">漫画入库</a></li>
+                    <li><a data-href="{{url('/backend/manhua/chapterlist/0')}}" href="javascript:void(0)" onclick="clicklink(this)" title="漫画章节列表">漫画章节列表</a></li>
+                    <li><a data-href="{{url('/backend/manhua/deal')}}" href="javascript:void(0)" onclick="clicklink(this)" title="漫画批量入库">漫画批量入库</a></li>
                 </ul>
             </dd>
 
@@ -120,8 +120,8 @@
 
             <dd style="display: none">
                 <ul>
-                    <li><a data-href="{{url('/backend/user/deposit')}}" href="javascript:void(0)" onclick="clicklink(this)" title="会员充值记录">会员充值记录</a></li>
-                    <li><a data-href="{{url('/backend/daili/withdraw')}}" href="javascript:void(0)" onclick="clicklink(this)" title="代理提款审核">代理提款审核</a></li>
+                    <li><a data-href="{{url('/backend/money/applydepositlist')}}" href="javascript:void(0)" onclick="clicklink(this)" title="会员充值记录">会员充值</a></li>
+                    <li><a data-href="{{url('/backend/money/applywithdrawlist')}}" href="javascript:void(0)" onclick="clicklink(this)" title="代理提款审核">代理提款审核</a></li>
                 </ul>
             </dd>
 

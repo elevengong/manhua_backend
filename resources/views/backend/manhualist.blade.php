@@ -47,7 +47,7 @@
                             <tr class="text-c">
                                 <td>{{$data['manhua_id']}}</td>
                                 <td><img src="{{$data['cover']}}" style="width:50px;" /></td>
-                                <td>{{$data['name']}}</td>
+                                <td><a href="/backend/manhua/chapterlist/{{$data['manhua_id']}}" style="color: red;" title="搜索{{$data['name']}}的章节">{{$data['name']}}</a></td>
                                 <td>{{$data['c_name']}}</td>
                                 <td>{{$data['author']}}</td>
                                 <td>{{$data['intro']}}</td>

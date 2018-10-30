@@ -16,9 +16,12 @@ class ManhuaController extends MyController
     public function manhualist(Request $request){
         if($request->isMethod('post')){
             $searchword = request()->input('searchword');
-            $manhuaArray = Manhua::where('name','like','%'.$searchword.'%')->orderBy('manhua_id', 'desc')->paginate($this->backendPageNum);
+            $manhuaArray = Manhua::select('manhua.*','category.c_name')
+                ->leftJoin('category',function ($join){
+                    $join->on('category.cid','=','manhua.cid');
+                })->where('manhua.name','like','%'.$searchword.'%')
+                ->orderBy('manhua.manhua_id', 'desc')->paginate($this->backendPageNum);
         }else{
-            //$manhuaArray = Manhua::orderBy('manhua_id', 'desc')->paginate($this->backendPageNum);
             $manhuaArray = Manhua::select('manhua.*','category.c_name')
                 ->leftJoin('category',function ($join){
                     $join->on('category.cid','=','manhua.cid');
@@ -46,6 +49,241 @@ class ManhuaController extends MyController
         }else{
             $firstCategoryArray = Category::where('parents_id','0')->orderBy('priority','desc')->get()->toArray();
             return view('backend.addmanhua',compact('firstCategoryArray'));
+        }
+    }
+
+    public function editmanhua(Request $request, $manhua_id){
+        if($request->isMethod('post')){
+            $input=$request->all();
+            unset($input['_token']);
+            $result = Manhua::where('manhua_id',$manhua_id)->update($input);
+            if ($result) {
+                $reData['status'] = 1;
+                $reData['msg'] = "修改成功";
+            } else {
+                $reData['status'] = 0;
+                $reData['msg'] = "修改失败";
+            }
+            echo json_encode($reData);
+
+        }else{
+            $firstCategoryArray = Category::where('parents_id','0')->orderBy('priority','desc')->get()->toArray();
+            $manhua = Manhua::find($manhua_id)->toArray();
+            return view('backend.editmanhua',compact('manhua','firstCategoryArray'));
+        }
+
+    }
+
+    public function chapterlist(Request $request,$manhua_id){
+        if($request->isMethod('post')){
+            $searchword = request()->input('searchword');
+            $ManhuaChapterArray = ManhuaChapter::select('manhuachapters.*','manhua.name')
+                ->leftJoin('manhua',function ($join){
+                    $join->on('manhua.manhua_id','=','manhuachapters.manhua_id');
+                })->where('manhuachapters.manhua_id',$searchword)
+                ->orderBy('manhuachapters.priority', 'asc')->paginate(100);
+        }else{
+            if($manhua_id == 0)
+            {
+                $ManhuaChapterArray = ManhuaChapter::select('manhuachapters.*','manhua.name')
+                    ->leftJoin('manhua',function ($join){
+                        $join->on('manhua.manhua_id','=','manhuachapters.manhua_id');
+                    })
+                    ->orderBy('manhuachapters.priority', 'asc')->paginate(100);
+            }else{
+                $ManhuaChapterArray = ManhuaChapter::select('manhuachapters.*','manhua.name')
+                    ->leftJoin('manhua',function ($join){
+                        $join->on('manhua.manhua_id','=','manhuachapters.manhua_id');
+                    })->where('manhuachapters.manhua_id',$manhua_id)
+                    ->orderBy('manhuachapters.priority', 'asc')->paginate(100);
+            }
+        }
+        return view('backend.chapterlist', ['datas' => $ManhuaChapterArray])->with('admin', session('admin'));
+
+    }
+
+    public function addchapter(Request $request){
+        if($request->isMethod('post')){
+            //先查询是该漫画ID是否存在
+            $manhua_id = request()->input('manhua_id');
+            $manhua = Manhua::find($manhua_id);
+            if(empty($manhua)){
+                $reData['status'] = 0;
+                $reData['msg'] = "该漫画ID不存在";
+                echo json_encode($reData);
+                exit;
+            }else{
+                if($manhua->finish == 1){
+                    $reData['status'] = 0;
+                    $reData['msg'] = "该漫画系列已完结，不能再添加章节了";
+                    echo json_encode($reData);
+                    exit;
+                }else{
+                    $chapter_name = request()->input('chapter_name');
+                    $chapter_cover = request()->input('chapter_cover');
+                    $status = request()->input('status');
+                    $vip = request()->input('vip');
+                    $views = request()->input('views');
+                    $coin = request()->input('coin');
+
+                    //获取该漫画ID的最新章节
+                    $lastChapter = ManhuaChapter::where('manhua_id',$manhua_id)->orderBy('priority','desc')->get()->take(1)->toArray();
+                    if(empty($lastChapter))
+                    {
+                        //空表示没有章节，这次添加的就是第一章节
+                        $inputData = array(
+                            'manhua_id' => $manhua_id,
+                            'chapter_name' => $chapter_name,
+                            'chapter_cover' => $chapter_cover,
+                            'status' => $status,
+                            'vip' => $vip,
+                            'pre_chapter_id' => 0,
+                            'next_chapter_id' => 0,
+                            'views' => $views,
+                            'priority' => 0,
+                            'coin' => $coin
+                        );
+                        $re1 = ManhuaChapter::create($inputData);
+                        if($re1){
+                            $reData['status'] = 1;
+                            $reData['msg'] = "添加漫画章节成功，请再添加该章节的图片";
+                        }else{
+                            $reData['status'] = 0;
+                            $reData['msg'] = "添加漫画章节失败";
+                        }
+                        echo json_encode($reData);
+
+                    }else{
+                        $lastChapterId = $lastChapter[0]['chapter_id'];
+                        $lastChapterPriority = $lastChapter[0]['priority'];
+                        $nowChapterPriority = $lastChapterPriority + 1;
+
+                        $inputData = array(
+                            'manhua_id' => $manhua_id,
+                            'chapter_name' => $chapter_name,
+                            'chapter_cover' => $chapter_cover,
+                            'status' => $status,
+                            'vip' => $vip,
+                            'pre_chapter_id' => $lastChapterId,
+                            'next_chapter_id' => 0,
+                            'views' => $views,
+                            'priority' => $nowChapterPriority,
+                            'coin' => $coin
+                        );
+                        $re1 = ManhuaChapter::create($inputData);
+                        //入库成功后获取章节ID更新到这部漫画的上一章节的下一页里
+                        $re2 = ManhuaChapter::where('chapter_id',$lastChapterId)->update(['next_chapter_id' => $re1->chapter_id]);
+
+                        if($re2){
+                            $reData['status'] = 1;
+                            $reData['msg'] = "添加漫画章节成功，请再添加该章节的图片";
+                        }else{
+                            $reData['status'] = 0;
+                            $reData['msg'] = "添加漫画章节失败";
+                        }
+                        echo json_encode($reData);
+                    }
+
+                }
+            }
+
+        }else{
+            return view('backend.addchapter');
+        }
+    }
+
+    public function viewchapterphotos(Request $request, $chapter_id){
+        $chpaterPhotos = ManhuaPhotos::where('chapter_id',$chapter_id)->where('status',1)->orderBy('priority','asc')->get()->toArray();
+        return view('backend.viewchapterphotos',compact('chpaterPhotos'));
+    }
+
+    public function savechapterphotos(Request $request, $chapter_id){
+        if($request->isMethod('post')){
+            //先检查一下该章节下面有没有图片
+            $photoCount = ManhuaPhotos::where('chapter_id',$chapter_id)->count();
+            if($photoCount == 0)
+            {
+                $manhua_id = request()->input('manhua_id');
+                //检查/public/chapter_temporary/目录下有没有图片
+                $dir =  dirname(dirname(dirname(dirname(__DIR__))))."/public/chapter_temporary/";
+                $photoArray = $this->my_scandir($dir);
+                $target_dir_1 =  dirname(dirname(dirname(dirname(__DIR__))))."/public/manhua/".$manhua_id."/";
+                $target_dir_2 = $target_dir_1.$chapter_id."/";
+                if(!is_dir($target_dir_1)){
+                    mkdir($target_dir_1, 0777);
+                }
+                if(!is_dir($target_dir_2)){
+                    mkdir($target_dir_2, 0777);
+                }
+
+                $rand = rand(1,100);
+                foreach ($photoArray as $num=>$photo)
+                {
+                    $old_photo_path = $dir.$photo;
+                    $new_photo_name = time().$manhua_id.$chapter_id.$rand.".jpg";
+                    copy($old_photo_path,$target_dir_2.$new_photo_name);
+
+                    $photoData = array(
+                        'chapter_id' => $chapter_id,
+                        'photo' => '/'.$manhua_id.'/'.$chapter_id.'/'.$new_photo_name,
+                        'priority' => $num
+                    );
+                    ManhuaPhotos::create($photoData);
+
+                    //删除图片
+                    unlink($old_photo_path);
+
+                    $rand ++;
+                }
+
+                $reData['status'] = 1;
+                $reData['msg'] = "添加图片成功";
+                echo json_encode($reData);
+                exit;
+
+
+            }else{
+                $reData['status'] = 0;
+                $reData['msg'] = "该漫画章节ID下已经有图片存在了";
+                echo json_encode($reData);
+                exit;
+            }
+
+
+        }else{
+            $info = ManhuaChapter::select('manhuachapters.*','manhua.name')->where('chapter_id',$chapter_id)
+                ->leftJoin('manhua',function ($join){
+                    $join->on('manhua.manhua_id','=','manhuachapters.manhua_id');
+                })->get()->toArray();
+            if(!empty($info)){
+                return view('backend.savechapterphotos')->with('chapter_id',$chapter_id)->with('info',$info[0]);
+            }else{
+                echo "Error";exit;
+            }
+
+        }
+    }
+
+    public function editchapter(Request $request, $chapter_id){
+        if($request->isMethod('post')){
+            $input=$request->all();
+            unset($input['_token']);
+            $result = ManhuaChapter::where('chapter_id',$chapter_id)->update($input);
+            if ($result) {
+                $reData['status'] = 1;
+                $reData['msg'] = "修改成功";
+            } else {
+                $reData['status'] = 0;
+                $reData['msg'] = "修改失败";
+            }
+            echo json_encode($reData);
+
+        }else{
+            $ManhuaChapterDetail = ManhuaChapter::select('manhuachapters.*','manhua.name')
+                ->leftJoin('manhua',function ($join){
+                    $join->on('manhua.manhua_id','=','manhuachapters.manhua_id');
+                })->where('manhuachapters.chapter_id',$chapter_id)->get()->toArray();
+            return view('backend.editchapter')->with('data',$ManhuaChapterDetail[0]);
         }
     }
 

@@ -47,31 +47,29 @@ Route::group(['middleware' => ['web','admin.login']],function () {
     //漫画管理
     Route::any('/backend/manhua/manhualist','backend\ManhuaController@manhualist');
     Route::any('/backend/manhua/addmanhua','backend\ManhuaController@addmanhua');
-    Route::any('/backend/manhua/editmanhua','backend\ManhuaController@editmanhua');
-
-    Route::any('/backend/manhua/chapterlist','backend\ManhuaController@chapterlist');
+    Route::any('/backend/manhua/editmanhua/{manhua_id}','backend\ManhuaController@editmanhua')->where(['manhua_id' => '[0-9]+']);
+    Route::any('/backend/manhua/chapterlist/{manhua_id}','backend\ManhuaController@chapterlist')->where(['manhua_id' => '[0-9]+']);
     Route::any('/backend/manhua/addchapter','backend\ManhuaController@addchapter');
-    Route::any('/backend/manhua/editchapter','backend\ManhuaController@editchapter');
+    Route::any('/backend/manhua/editchapter/{chapter_id}','backend\ManhuaController@editchapter')->where(['chapter_id' => '[0-9]+']);
+    Route::get('/backend/manhua/viewchapterphotos/{chapter_id}','backend\ManhuaController@viewchapterphotos')->where(['chapter_id' => '[0-9]+']);
+    Route::any('/backend/manhua/savechapterphotos/{chapter_id}','backend\ManhuaController@savechapterphotos')->where(['chapter_id' => '[0-9]+']);
 
+    //扫描入库
     Route::any('/backend/manhua/deal','backend\ManhuaController@deal');
 
+    //会员充值
+    Route::any('/backend/money/applydepositlist','backend\DepositController@depositlist');
+    Route::get('/backend/money/viewdeposit/{deposit_id}','backend\DepositController@applydepositlist')->where(['deposit_id' => '[0-9]+']);
+    //人工审核
+    Route::any('/backend/money/verifydepositbyadmin/{deposit_id}','backend\DepositController@verifydepositbyadmin')->where(['deposit_id' => '[0-9]+']);
 
-
-
-
-    //广告会员充值
-    Route::any('/backend/money/applydeposit','backend\DepositController@applydeposit');
-    Route::get('/backend/money/dealdepositorder/{deposit_id}','backend\DepositController@dealdepositorder')->where(['deposit_id' => '[0-9]+']);
-    Route::any('/backend/money/updatedepositorder/{deposit_id}','backend\DepositController@updatedepositorder')->where(['deposit_id' => '[0-9]+']);
-
-    Route::any('/backend/money/deposit','backend\DepositController@depositrecord');
-
+    //代理提现
+    Route::any('/backend/money/applywithdrawlist','backend\WithdrawController@applywithdrawlist');
 
 
 
 
     //图片上传
-    Route::any('/backend/upload','backend\JobController@upload');
     Route::any('/backend/uploadphoto/{id}','MyController@uploadphoto');
 });
 

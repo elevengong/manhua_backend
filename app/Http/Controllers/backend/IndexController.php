@@ -8,6 +8,7 @@ use App\Http\Controllers\MyController;
 use App\Http\Requests;
 use Crypt;
 
+
 class IndexController extends MyController
 {
     public function index(Request $request){
