@@ -125,6 +125,17 @@
                 </ul>
             </dd>
 
+            <dt>
+                <i class="Hui-iconfont">&#xe616;</i> 统计流量
+                <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
+            </dt>
+
+            <dd style="display: none">
+                <ul>
+                    <li><a data-href="{{url('/backend/statistics/list')}}" href="javascript:void(0)" onclick="clicklink(this)" title="会员充值记录">统计代理来路</a></li>
+                </ul>
+            </dd>
+
 
 
         </dl>

@@ -64,10 +64,12 @@ Route::group(['middleware' => ['web','admin.login']],function () {
     Route::any('/backend/money/verifydepositbyadmin/{deposit_id}','backend\DepositController@verifydepositbyadmin')->where(['deposit_id' => '[0-9]+']);
 
     //代理提现
-    Route::any('/backend/money/applywithdrawlist','backend\WithdrawController@applywithdrawlist');
+    Route::any('/backend/money/applywithdrawlist','backend\WithdrawController@withdrawlist');
+    Route::delete('/backend/money/closeorder/{withdraw_id}','backend\WithdrawController@closeorder')->where(['withdraw_id' => '[0-9]+']);
+    Route::any('/backend/money/comfirmorder/{withdraw_id}','backend\WithdrawController@comfirmorder')->where(['withdraw_id' => '[0-9]+']);
 
-
-
+    //统计代理来路
+    Route::any('/backend/statistics/list','backend\StatisticsController@statisticslist');
 
     //图片上传
     Route::any('/backend/uploadphoto/{id}','MyController@uploadphoto');

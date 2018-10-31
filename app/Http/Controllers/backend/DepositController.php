@@ -28,18 +28,21 @@ class DepositController extends MyController
             $newType[$sale['t_id']] = $sale['name'];
         }
         if($request->isMethod('post')){
-
-
+            $searchword = request()->input('searchword');
+            $orders = OrderDeposit::select('orderdeposit.*','users.user_name')
+                ->leftJoin('users',function ($join){
+                    $join->on('users.uid','=','orderdeposit.uid');
+                })->where('users.user_name','like','%'.$searchword.'%')
+                ->orderBy('orderdeposit.created_at', 'desc')->paginate($this->backendPageNum);
 
         }else{
             $orders = OrderDeposit::select('orderdeposit.*','users.user_name')
                 ->leftJoin('users',function ($join){
                     $join->on('users.uid','=','orderdeposit.uid');
                 })
-                ->orderBy('orderdeposit.created_at', 'asc')->paginate($this->backendPageNum);
-            return view('backend.depositlist',compact('orders','newType'))->with('admin', session('admin'));
+                ->orderBy('orderdeposit.created_at', 'desc')->paginate($this->backendPageNum);
         }
-
+        return view('backend.depositlist',compact('orders','newType'))->with('admin', session('admin'));
     }
 
     public function verifydepositbyadmin(Request $request,$deposit_id){
@@ -129,8 +132,6 @@ class DepositController extends MyController
                 $data['msg'] = "Error!";
                 echo json_encode($data);
             }
-
-
 
 
         }else{
