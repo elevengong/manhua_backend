@@ -71,6 +71,11 @@ Route::group(['middleware' => ['web','admin.login']],function () {
     //统计代理来路
     Route::any('/backend/statistics/list','backend\StatisticsController@statisticslist');
 
+    //设置常用属性
+    Route::get('/backend/attributelist','backend\IndexController@attributelist');
+    Route::any('/backend/addstatic','backend\IndexController@addstatic');
+    Route::any('/backend/editstatic/{id}','backend\IndexController@editstatic')->where(['id' => '[0-9]+']);
+
     //图片上传
     Route::any('/backend/uploadphoto/{id}','MyController@uploadphoto');
 });

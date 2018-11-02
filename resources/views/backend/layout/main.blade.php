@@ -74,6 +74,7 @@
             <dd style="display: none">
                 <ul>
                     <li><a data-href="{{url('/backend/adminlist')}}" href="javascript:void(0)" onclick="clicklink(this)" title="管理员列表">管理员列表</a></li>
+                    <li><a data-href="{{url('/backend/attributelist')}}" href="javascript:void(0)" onclick="clicklink(this)" title="常用属性设置">常用属性设置</a></li>
                 </ul>
             </dd>
 
