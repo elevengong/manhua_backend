@@ -65,6 +65,16 @@ class MyController extends Controller
 
     }
 
+    //随机获取指定长度随机字符串
+    protected function random_string($length = 6, $chars = null) {
+        $str = '';
+        if( empty($chars) ) $chars = "AghijkcFGHYZabL3456S27tuXDEeBfdKlVWpMNOqrsmPQRCIJnoTUxyz01vw89";
+        while( strlen($str) < $length) {
+            $str .= substr($chars, rand(0, strlen($chars) - 1), 1);
+        }
+        return $str;
+ }
+
 //    //创建多级目录
 //    protected function mkdirs_2($path){
 //        if(!is_dir($path)){
@@ -87,7 +97,12 @@ class MyController extends Controller
                 'msg' => '只能上传 png | jpg | gif格式的图片'
             ]);
         }
-        $destinationPath = 'public/uploads/';
+        $today = date('Ymd',time());
+        $dir =  dirname(dirname(dirname(__DIR__)))."/public/uploads/".$today."/";
+        if(!is_dir($dir)){
+            mkdir($dir, 0777);
+        }
+        $destinationPath = 'public/uploads/'.$today.'/';
         $extension = $file->getClientOriginalExtension();
         $fileName = time().str_random(5).'.'.$extension;
         $file->move($destinationPath, $fileName);

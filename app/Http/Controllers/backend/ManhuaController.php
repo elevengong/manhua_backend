@@ -216,11 +216,11 @@ class ManhuaController extends MyController
                     mkdir($target_dir_2, 0777);
                 }
 
-                $rand = rand(1,100);
                 foreach ($photoArray as $num=>$photo)
                 {
+                    $rand = rand(100,999);
                     $old_photo_path = $dir.$photo;
-                    $new_photo_name = time().$manhua_id.$chapter_id.$rand.".jpg";
+                    $new_photo_name = time().$this->random_string().$rand.".jpg";
                     copy($old_photo_path,$target_dir_2.$new_photo_name);
 
                     $photoData = array(
@@ -330,15 +330,15 @@ class ManhuaController extends MyController
                     ManhuaChapter::where('chapter_id',$preData[0]['chapter_id'])->update(['next_chapter_id'=> $chapter_id]);
                 }
 
-                $rand = rand(1,100);
                 foreach ($data as $num=>$photo)
                 {
+                    $rand = rand(100,999);
                     //入库之前，先把图片存到指定的文件夹里，改名，再获取图片最新的名字
                     echo $old_photo_path =  dirname(dirname(dirname(dirname(__DIR__))))."/public/readyupload/1/".$file.'/'.$photo;
                     echo "<br>";
                     $target_dir_1 =  dirname(dirname(dirname(dirname(__DIR__))))."/public/manhua/".$manhua_id."/";
                     $target_dir_2 = $target_dir_1.$chapter_id."/";
-                    $new_photo_name = time().$manhua_id.$chapter_id.$rand.".jpg";
+                    $new_photo_name = time().$this->random_string.$rand.".jpg";
                     if(!is_dir($target_dir_1)){
                         mkdir($target_dir_1, 0777);
                     }
