@@ -52,7 +52,7 @@
         <div class="col-xs-12 row cl">
             <label class="form-label col-xs-3 col-sm-3">显示/不显示：</label>
             <div class="col-xs-9 col-sm-9">
-                <select name="finish" style="float:left;" id="finish">
+                <select name="status" style="float:left;" id="status">
                     <option value="1">显示</option>
                     <option value="0" selected="selected">不显示</option>
                 </select>
