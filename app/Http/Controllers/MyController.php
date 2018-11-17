@@ -65,7 +65,25 @@ class MyController extends Controller
 
     }
 
-    //随机获取指定长度随机字符串
+    //二维数组排序
+    protected function array_sort($arr,$type='asc'){
+        $array = array();
+        $temp = array();
+        foreach ($arr as $v=>$val)
+        {
+            $temp[] = $v;
+        }
+        asort($temp);
+        foreach($temp as $v=>$t)
+        {
+            $array[$t] = $arr[$t];
+
+        }
+        return $array;
+
+    }
+
+//随机获取指定长度随机字符串
     protected function randomString($length = 6, $chars = null) {
         return "aaa";
         $str = '';

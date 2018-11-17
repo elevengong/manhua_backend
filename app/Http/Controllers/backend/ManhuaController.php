@@ -303,8 +303,9 @@ class ManhuaController extends MyController
 
             $dir =  dirname(dirname(dirname(dirname(__DIR__))))."/public/readyupload/";
             $target_dir =  dirname(dirname(dirname(dirname(__DIR__))))."/public/manhua/";
-            $datas = $this->my_scandir($dir);
-            //print_r($datas);exit;
+            $datas =  $this->my_scandir($dir);
+            $datas=$this->array_sort($datas);
+//            print_r($datas);exit;
             $priority = 1;
             $chapterData = array();
             $count = count($datas);
