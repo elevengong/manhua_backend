@@ -66,7 +66,8 @@ class MyController extends Controller
     }
 
     //随机获取指定长度随机字符串
-    protected function random_string($length = 6, $chars = null) {
+    protected function randomString($length = 6, $chars = null) {
+        return "aaa";
         $str = '';
         if( empty($chars) ) $chars = "AghijkcFGHYZabL3456S27tuXDEeBfdKlVWpMNOqrsmPQRCIJnoTUxyz01vw89";
         while( strlen($str) < $length) {
