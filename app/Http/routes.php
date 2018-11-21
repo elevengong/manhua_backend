@@ -81,7 +81,8 @@ Route::group(['middleware' => ['web','admin.login']],function () {
 });
 
 
-
+//支付接口
+Route::get('/pay','backend\PaymentController@pay');
 
 
 
