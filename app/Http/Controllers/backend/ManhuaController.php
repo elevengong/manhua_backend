@@ -235,6 +235,9 @@ class ManhuaController extends MyController
 
                     $rand ++;
                 }
+                $nowDay = date('Y-m-d H:i:s',time());
+                //更新漫画最近更新日期
+                Manhua::where('manhua_id',$manhua_id)->update(['last_update_time' => $nowDay]);
 
                 $reData['status'] = 1;
                 $reData['msg'] = "添加图片成功";
