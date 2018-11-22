@@ -14,6 +14,7 @@
 Route::group(['middleware' => ['web']],function () {
     Route::any('/backend/login','backend\LoginController@login');
     Route::get('/backend/code','backend\LoginController@code');
+
 });
 
 Route::group(['middleware' => ['web','admin.login']],function () {
@@ -83,6 +84,10 @@ Route::group(['middleware' => ['web','admin.login']],function () {
 
 //支付接口
 Route::get('/pay','backend\PaymentController@pay');
+Route::post('/paymentpage','backend\PaymentController@paymentpage');
+
+Route::post('/callback','backend\PaymentController@callBack');
+//支付回调
 
 
 

@@ -38,7 +38,27 @@ class PaymentController extends MyController
 
     }
 
-    public function callBack(){
+    public function paymentpage(Request $request){
+        if($request->isMethod('post')){
+            $optEmail = request()->input('optEmail');
+            $payAmount = request()->input('payAmount');
+            $title = request()->input('title');
+            return view('backend.paymentpage',compact('optEmail','payAmount','title'));
+        }else{
+            echo "Error!";exit;
+        }
+    }
+
+    public function callBack(Request $request){
+        if($request->isMethod('post')){
+            $aa = request()->input('title');
+            
+
+
+
+        }else{
+            echo 'Error';exit;
+        }
 
     }
 }
