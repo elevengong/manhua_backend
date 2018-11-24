@@ -10,7 +10,7 @@ class MyController extends Controller
 {
     public $backendPageNum = '20';
     public $Ipbaimingdan = '0'; //ip白名单，目前只有菲律宾的ip可以login，1为开启，0为关闭
-    public $coinrate = '10';  //1远等于10个金币
+    public $coinrate = '100';  //1元等于100个金币
 
     public function __construct()
     {

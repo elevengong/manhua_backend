@@ -67,12 +67,20 @@ class DepositController extends MyController
                     case 1:
                         if($UserDetail[0]['vip']==0)
                         {
+                            $vip_end_time = date("Y-m-d h:i:s", strtotime("+1 day", time()));
+                        }else{
+                            $vip_end_time = date("Y-m-d h:i:s", strtotime("+1 day", strtotime($UserDetail[0]['vip_end_time'])));
+                        }
+                        break;
+                    case 2:
+                        if($UserDetail[0]['vip']==0)
+                        {
                             $vip_end_time = date("Y-m-d h:i:s", strtotime("+1 months", time()));
                         }else{
                             $vip_end_time = date("Y-m-d h:i:s", strtotime("+1 months", strtotime($UserDetail[0]['vip_end_time'])));
                         }
                         break;
-                    case 2:
+                    case 3:
                         if($UserDetail[0]['vip']==0)
                         {
                             $vip_end_time = date("Y-m-d h:i:s", strtotime("+3 months", time()));
@@ -80,7 +88,7 @@ class DepositController extends MyController
                             $vip_end_time = date("Y-m-d h:i:s", strtotime("+3 months", strtotime($UserDetail[0]['vip_end_time'])));
                         }
                         break;
-                    case 3:
+                    case 4:
                         if($UserDetail[0]['vip']==0)
                         {
                             $vip_end_time = date("Y-m-d h:i:s", strtotime("+12 months", time()));
@@ -100,11 +108,10 @@ class DepositController extends MyController
                     $result = OrderDeposit::where('deposit_id', $deposit_id)->update(['status' => $status, 'remark' => $remark, 'deal_time'=> date('Y-m-d h:i:s',time())]);
                 }
 
-               if($type != 4)
+               if($type != 5)
                {
                    $result1 = Users::where('uid',$OrderDetail[0]['uid'])->update(['vip' => 1, 'vip_end_time'=> $vip_end_time]);
                }else{
-
                    $result1 = Users::where('uid',$OrderDetail[0]['uid'])->increment('coin',$coinAmount);
                }
                //留个接口，代理收款------------------------------------------------------------------------
